@@ -1,100 +1,98 @@
-#No using the built in type check function
-#https://www.w3schools.com/python/python_try_except.asp
 def sum(arr: list) -> int:
     total = 0
-    i = 0                  # start
+    i = 0
 
-    while i < len(arr):    # stop condition
-        total = total + arr[i]
-        i = i + 1          # increment
+    while i < len(arr):
+        try:
+            if type(arr[i]) == int or type(arr[i]) == float:
+                total = total + arr[i]
+        except:
+            pass
+        i = i + 1
 
     return total
+
+
 def cleanData(rawData: list) -> list:
     cleaned = []
-    i = 0                  # start
+    i = 0
 
-    while i < len(rawData):  # stop condition
+    while i < len(rawData):
         try:
             cleaned.append(float(rawData[i]))
         except:
             pass
-        i = i + 1            # increment
+        i = i + 1
 
     return cleaned
+
+
 def unreliableCalculator(divisors: list) -> list:
     results = []
-    i = 0                   # start
+    i = 0
 
-    while i < len(divisors):  # stop condition
+    while i < len(divisors):
         try:
             results.append(100 / divisors[i])
         except Exception as e:
             results.append(type(e).__name__)
-        i = i + 1            # increment
+        i = i + 1
 
     return results
+
+
 def upperAll(arr: list) -> None:
-    i = 0                   # start
+    i = 0
 
-    while i < len(arr):     # stop condition
-        if type(arr[i]) == str:
+    while i < len(arr):
+        try:
             arr[i] = arr[i].upper()
-        i = i + 1           # increment
-def firstItems(arr: list) -> list:
-    """
-    Returns a new list containing the first item of each inner list,
-    or the value itself if it is not a list. Skips empty lists safely.
-    """
-    result = []
-    i = 0  # start
+        except:
+            pass
+        i = i + 1
 
-    while i < len(arr):  # stop condition
-        if type(arr[i]) == list:
+
+def firstItems(arr: list) -> list:
+    result = []
+    i = 0
+
+    while i < len(arr):
+        try:
+            result.append(arr[i][0])
+        except:
             try:
-                result.append(arr[i][0])
-            except IndexError:
-                pass  # skip empty lists
-        else:
-            result.append(arr[i])
-        i = i + 1  # increment
+                result.append(arr[i])
+            except:
+                pass
+        i = i + 1
 
     return result
-# ======== sum ========
-print("Testing sum()")
-print(sum([1, 2, 3, 4, 5]))          # Expected: 15
-print(sum([10, -5, 3]))               # Expected: 8
-print(sum([]))                         # Expected: 0
-print()
 
-# ======== cleanData ========
-print("Testing cleanData()")
-print(cleanData([1, "2", "hello", 3.5, None]))  # Expected: [1.0, 2.0, 3.5]
-print(cleanData(["5.5", "NaN", "100"]))          # Expected: [5.5, 100.0]
-print(cleanData([True, False, "3"]))             # Expected: [1.0, 0.0, 3.0]
-print()
+def test_sum():
+    assert sum([1,7,"hello", 8.5]) == 16.5
+    assert sum(["Cat", "dog","7"]) ==0
+    assert sum([1,2,3,4]) ==10
 
-# ======== unreliableCalculator ========
-print("Testing unreliableCalculator()")
-print(unreliableCalculator([100, 50, 0, "5"]))  # Expected: [1.0, 2.0, 'ZeroDivisionError', 'TypeError']
-print(unreliableCalculator([25, 20, 4]))         # Expected: [4.0, 5.0, 25.0]
-print(unreliableCalculator([0]))                # Expected: ['ZeroDivisionError']
-print()
-# ======== upperAll ========
-print("Testing upperAll()")
-test_list = ["hello", "world", 123, True]
-upperAll(test_list)
-print(test_list)                                # Expected: ['HELLO', 'WORLD', 123, True]
 
-test_list2 = ["pizza", "burger", "food"]
-upperAll(test_list2)
-print(test_list2)                              
-print()
+def test_clean_data():
+    assert cleanData(["1", "7.5", "cat", "14.f"]) == [1.0,7.5]
+    assert cleanData(["1", "7.5", "cat", "14.6"]) == [1.0,7.5,14.6]
 
-# ======== firstItems ========
-print("Testing firstItems()")
-print(firstItems([[1,2],[3,4],[5,6],[7,8],9]))      # Expected: [1, 3, 5, 7, 9]
-print(firstItems([["a","b"], ["c"], "d", ["e","f"]])) # Expected: ['a', 'c', 'd', 'e']
-print(firstItems([[], [1,2], 10]))
+
+def test_unreliable_calculator():
+    assert  unreliableCalculator([100,700,3,0,12,"Cat"])==[1.0, 0.14285714285714285, 33.333333333333336, 'ZeroDivisionError', 8.333333333333334, 'TypeError']
+
+
+def test_upper_all():
+    words = ["hello", "Class", 1, "good", "job"]
+    assert upperAll(words)==None
+    assert words==['HELLO', 'CLASS', 1, 'GOOD', 'JOB']
+
+
+def test_first_items():
+    assert firstItems([1,[7,5],["hello"], ["food","Hello"],8]) == [1,7,"hello","food",8]
+    assert firstItems([[1,2],[3,4],[5,6],[7,8]]) == [1,3,5,7]
+
 
 
 
